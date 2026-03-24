@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-@Controller
+@Controller // 문자열로 HTML을 매핑해서 반환하는 컨트롤러      // RestController는 HTML을 매핑해서 반환하지 않음
 public class BookController {
     @Autowired
     BookServiceImpl bookService;
@@ -20,7 +20,7 @@ public class BookController {
     @RequestMapping(value = "/books", method = RequestMethod.GET)   // FastAPI의 @app.get 같은 것
     public String requestBookList(Model model) {
         List<Book> bookList = bookService.getAllBookList();
-        model.addAttribute("bookList", bookList);
-        return "books";
+        model.addAttribute("bookList", bookList);   // HTML에 담을 데이터 설정
+        return "books"; // View 이름 (Not String)
     }
 }
