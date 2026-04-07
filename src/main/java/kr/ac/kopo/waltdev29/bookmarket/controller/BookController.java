@@ -7,12 +7,10 @@ import kr.ac.kopo.waltdev29.bookmarket.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller // 문자열로 HTML을 매핑해서 반환하는 컨트롤러      // RestController는 HTML을 매핑해서 반환하지 않음
@@ -22,11 +20,20 @@ public class BookController {
     BookServiceImpl bookService;
 
     @GetMapping // FastAPI의 @app.get 같은 것
-    public String requestBookList(Model model) {
-        List<Book> bookList = bookService.getAllBookList();
+    public String requestBookList(Model model, @RequestParam(value = "category", required = false) String category) {
+        List<Book> bookList = new ArrayList<>();
+        if (category == null) {
+            bookList = bookService.getAllBookList();
+        }
+        else {
+            bookList = bookService.getBooksByCategory(category);
+        }
+
         model.addAttribute("bookList", bookList);   // HTML에 담을 데이터 설정
         return "books"; // View 이름 (Not String)
     }
+
+
 
     // ModelAndView 실습 (결과는 위 엔드포인트와 같음)
     @GetMapping(value="/all")
@@ -38,12 +45,16 @@ public class BookController {
         return mav;
     }
 
+
+
+    // Path Parameter(id)로 특정 도서 상세 정보 반환
     @GetMapping(value="/{id}")
-    public String requestBook(
+    public String requestBookById(
             Model model,
-            @PathVariable("id") String book_id)
+            @PathVariable("id") String bookId)
     {
-        model.addAttribute("id", book_id);
+        Book book = bookService.getBookById(bookId);
+        model.addAttribute("book", book);
         return "bookInfo";
     }
 }

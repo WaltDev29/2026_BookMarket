@@ -4,8 +4,7 @@ import kr.ac.kopo.waltdev29.bookmarket.domain.Book;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository // Repository 계층임을 명시
 public class BookRepositoryImpl implements BookRepository{
@@ -67,8 +66,82 @@ public class BookRepositoryImpl implements BookRepository{
         listOfBooks.add(book4);
     }
 
+
+    // ============ 전체 도서 목록 반환 ============
     @Override
     public List<Book> getAllBookList() {
         return listOfBooks;
+    }
+
+
+
+    // ============ ID로 특정 도서 반환 ============
+    @Override
+    public Book getBookById(String bookId) {
+        Book searchBook = null;
+
+        // ====== 도서 목록 순회하면서 ID 일치 도서 찾기 ======
+        for (Book book : listOfBooks) {
+            if (book!=null && book.getBookId()!=null && book.getBookId().equals(bookId)) {
+                searchBook = book;
+                break;
+            }
+        }
+
+        // ====== 해당 도서 없을 경우 예외 반환 ======
+        if (searchBook == null) {
+            throw new IllegalArgumentException("도서ID가 " + bookId + "인 도서를 찾을 수 없습니다.");
+        }
+
+        return searchBook;
+    }
+
+
+
+    // ============ 카테고리로 도서목록 반환 ============
+    @Override
+    public List<Book> getBooksByCategory(String category) {
+        List<Book> booksByCategory = new ArrayList<>();
+
+        for (Book book : listOfBooks) {
+            if (book!=null && book.getCategory()!=null && book.getCategory().equalsIgnoreCase(category)) {
+                booksByCategory.add(book);
+            }
+        }
+
+        if (booksByCategory.isEmpty()) {
+            throw new IllegalArgumentException(category + " 카테고리 도서가 없습니다.");
+        }
+
+        return booksByCategory;
+    }
+
+
+    // ============ 카테고리&출판사 Filter로 도서목록 반환 ============
+    @Override
+    public Set<Book> getBooksByFilter(Map<String, List<String>> filter) {
+        Set<Book> booksByCategory = new HashSet<>();
+        Set<Book> booksByPublisher = new HashSet<>();
+        Set<String> filterKeys = filter.keySet();
+
+        if (filterKeys.contains("category")) {
+            for (String category: filter.get("category")) {
+                booksByCategory.addAll(getBooksByCategory(category));
+        }
+
+        if (filterKeys.contains("publisher")) {
+            for (String publisher : filter.get("publisher"))
+                for (Book book : listOfBooks) {
+                    if (book.getPublisher() != null && book.getPublisher().equalsIgnoreCase(publisher)) {
+                        booksByPublisher.add(book);
+                    }
+                }
+            }
+        }
+
+        // A.retainAll(B) : A에 A와 B의 교집합만 남김.
+        booksByCategory.retainAll(booksByPublisher);
+
+        return booksByCategory;
     }
 }

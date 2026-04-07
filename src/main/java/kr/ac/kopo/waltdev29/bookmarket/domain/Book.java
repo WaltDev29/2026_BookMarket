@@ -22,9 +22,7 @@ public class Book {
     private long unitsInStock;  // 재고
     private String releaseDate; // 출판 일자
     private String condition;   // 책 상태 (신품, 중고, e-book)
-
-    public Book() {
-    }
+    private String fileName;
 
     public Book(String bookId, String name, BigDecimal unitPrice, String author, String description, String publisher, String category, String releaseDate) {
         this.bookId = bookId;
@@ -35,5 +33,6 @@ public class Book {
         this.publisher = publisher;
         this.category = category;
         this.releaseDate = releaseDate;
+        this.fileName = bookId + ".jpg";
     }
 }

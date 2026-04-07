@@ -14,7 +14,7 @@
     <div class="container py-4">
         <header class="pb-3 mb-4 border-bottom">
             <a href="/BookMarket/home" class="d-flex align-items-center text-body-emphasis text-decoration-none">
-                <img src="imgs/book_icon.png" alt="메인 아이콘">
+                <img th:src="@{/images/book_icon.png}" width="100" alt="메인 아이콘">
                 <span class="fs-4">&nbsp;&nbsp;BookMarket</span>
             </a>
         </header>
@@ -28,7 +28,7 @@
 
         <div class="row align-items-md-stretch">
             <div class="col-md-4">
-                <img th:src="'/BookMarket/images/'+${book.getFileName()}" style="width: 90%">
+                <img th:src="@{/images/{file}(file=${book.fileName})}" style="width: 90%">
                 <div class="text-center">
                     <a style="text-decoration-line: none" th:href="@{download(file=${book.getFileName()})}">이미지다운로드</a>
                 </div>
