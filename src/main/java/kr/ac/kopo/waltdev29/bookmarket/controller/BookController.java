@@ -10,8 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller // 문자열로 HTML을 매핑해서 반환하는 컨트롤러      // RestController는 HTML을 매핑해서 반환하지 않음
 @RequestMapping("/books")
@@ -48,7 +47,7 @@ public class BookController {
 
 
     // Path Parameter(id)로 특정 도서 상세 정보 반환
-    @GetMapping(value="/{id}")
+    @GetMapping(value="/id/{id}")
     public String requestBookById(
             Model model,
             @PathVariable("id") String bookId)
@@ -57,4 +56,18 @@ public class BookController {
         model.addAttribute("book", book);
         return "bookInfo";
     }
+
+
+    // MatrixVariable로 도서 Filtering
+    @GetMapping(value="/{filter}")
+    public String requestBookByFilter(
+            Model model,
+            @MatrixVariable(pathVar = "filter")Map<String, List<String>> filter
+            )
+    {
+        Set<Book> bookList = bookService.getBooksByFilter(filter);
+        model.addAttribute("bookList", bookList);
+        return "books";
+    }
+
 }

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Repository // Repository 계층임을 명시
-public class BookRepositoryImpl implements BookRepository{
+public class BookRepositoryImpl implements BookRepository {
     private List<Book> listOfBooks = new ArrayList<>();
 
     public BookRepositoryImpl() {
@@ -74,7 +74,6 @@ public class BookRepositoryImpl implements BookRepository{
     }
 
 
-
     // ============ ID로 특정 도서 반환 ============
     @Override
     public Book getBookById(String bookId) {
@@ -82,7 +81,7 @@ public class BookRepositoryImpl implements BookRepository{
 
         // ====== 도서 목록 순회하면서 ID 일치 도서 찾기 ======
         for (Book book : listOfBooks) {
-            if (book!=null && book.getBookId()!=null && book.getBookId().equals(bookId)) {
+            if (book != null && book.getBookId() != null && book.getBookId().equals(bookId)) {
                 searchBook = book;
                 break;
             }
@@ -97,14 +96,13 @@ public class BookRepositoryImpl implements BookRepository{
     }
 
 
-
     // ============ 카테고리로 도서목록 반환 ============
     @Override
     public List<Book> getBooksByCategory(String category) {
         List<Book> booksByCategory = new ArrayList<>();
 
         for (Book book : listOfBooks) {
-            if (book!=null && book.getCategory()!=null && book.getCategory().equalsIgnoreCase(category)) {
+            if (book != null && book.getCategory() != null && book.getCategory().equalsIgnoreCase(category)) {
                 booksByCategory.add(book);
             }
         }
@@ -120,28 +118,29 @@ public class BookRepositoryImpl implements BookRepository{
     // ============ 카테고리&출판사 Filter로 도서목록 반환 ============
     @Override
     public Set<Book> getBooksByFilter(Map<String, List<String>> filter) {
-        Set<Book> booksByCategory = new HashSet<>();
-        Set<Book> booksByPublisher = new HashSet<>();
-        Set<String> filterKeys = filter.keySet();
+        Set<Book> result = new HashSet<>(listOfBooks);
 
-        if (filterKeys.contains("category")) {
-            for (String category: filter.get("category")) {
+        if (filter.containsKey("category")) {
+            Set<Book> booksByCategory = new HashSet<>();
+            for (String category : filter.get("category")) {
                 booksByCategory.addAll(getBooksByCategory(category));
+            }
+            result.retainAll(booksByCategory);
         }
 
-        if (filterKeys.contains("publisher")) {
-            for (String publisher : filter.get("publisher"))
+        if (filter.containsKey("publisher")) {
+            Set<Book> booksByPublisher = new HashSet<>();
+            for (String publisher : filter.get("publisher")) {
                 for (Book book : listOfBooks) {
-                    if (book.getPublisher() != null && book.getPublisher().equalsIgnoreCase(publisher)) {
+                    if (book.getPublisher() != null &&
+                            book.getPublisher().equalsIgnoreCase(publisher)) {
                         booksByPublisher.add(book);
                     }
                 }
             }
+            result.retainAll(booksByPublisher);
         }
 
-        // A.retainAll(B) : A에 A와 B의 교집합만 남김.
-        booksByCategory.retainAll(booksByPublisher);
-
-        return booksByCategory;
+        return result;
     }
 }
