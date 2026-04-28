@@ -70,4 +70,20 @@ public class BookController {
         return "books";
     }
 
+
+    @GetMapping(value="/add")
+    public String showAddBookPage() {
+        return "addBook";
+    }
+
+    @PostMapping(value="/add")
+    public String addBook(Book book) {
+        bookService.setNewBook(book);
+        return "redirect:/books";
+    }
+
+    @ModelAttribute
+    public void addTitle(Model model) {
+        model.addAttribute("addTitle", "신규 도서 등록");
+    }
 }

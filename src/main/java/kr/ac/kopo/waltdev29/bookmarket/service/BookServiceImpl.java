@@ -33,4 +33,9 @@ public class BookServiceImpl implements BookService{
     public Set<Book> getBooksByFilter(Map<String, List<String>> filter) {
         return bookRepository.getBooksByFilter(filter);
     }
+
+    @Override
+    public void setNewBook(Book book) {
+        bookRepository.setNewBook(book);
+    }
 }

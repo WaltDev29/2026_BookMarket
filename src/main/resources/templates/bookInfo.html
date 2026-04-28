@@ -30,7 +30,7 @@
             <div class="col-md-4">
                 <img th:src="@{/images/{file}(file=${book.fileName})}" style="width: 90%">
                 <div class="text-center">
-                    <a style="text-decoration-line: none" th:href="@{download(file=${book.getFileName()})}">이미지다운로드</a>
+<!--                    <a style="text-decoration-line: none" th:href="@{download(file='/imags/' + ${book.getFileName()})}">이미지다운로드</a>-->
                 </div>
             </div>
             <div class="col-md-8">
