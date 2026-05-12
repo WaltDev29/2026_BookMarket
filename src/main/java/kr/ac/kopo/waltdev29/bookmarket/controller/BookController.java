@@ -5,11 +5,15 @@ package kr.ac.kopo.waltdev29.bookmarket.controller;
 import kr.ac.kopo.waltdev29.bookmarket.domain.Book;
 import kr.ac.kopo.waltdev29.bookmarket.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Controller // 문자열로 HTML을 매핑해서 반환하는 컨트롤러      // RestController는 HTML을 매핑해서 반환하지 않음
@@ -71,6 +75,9 @@ public class BookController {
     }
 
 
+    @Value("${file.uploadDir}")
+    String fileDir;
+
     @GetMapping(value="/add")
     public String showAddBookPage() {
         return "addBook";
@@ -78,6 +85,17 @@ public class BookController {
 
     @PostMapping(value="/add")
     public String addBook(Book book) {
+        MultipartFile bookImage = book.getBookImage();
+        String saveName = bookImage.getOriginalFilename();
+        File saveFile = new File(fileDir, saveName);
+        if (bookImage != null && !bookImage.isEmpty()) {
+            try {
+                bookImage.transferTo(saveFile);
+            } catch (IOException e) {
+                throw new RuntimeException("도서 이미지 업로드가 실패하였습니다." ,e);
+            }
+        }
+        book.setFileName(saveName);
         bookService.setNewBook(book);
         return "redirect:/books";
     }

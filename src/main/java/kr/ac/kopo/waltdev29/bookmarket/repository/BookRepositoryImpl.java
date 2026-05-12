@@ -19,7 +19,8 @@ public class BookRepositoryImpl implements BookRepository {
                 "스프링 부트는 스프링을 기반으로 쉽고 빠르게 웹 애플리케이션을 개발할 수 있는 도구입니다. 이 책에서는 스프링 부트의 기본 개념을 쉽게 이해하고 다양한 실습 예제로 빠르게 익힐 수 있습니다. 그리고 단계별 실습을 따라 하다 보면 도서 쇼핑몰 구축 프로젝트를 완성할 수 있습니다. 개념-실습-프로젝트의 3단계 학습으로 스프링 부트를 제대로 익힌다면 개발 시간을 단축하고 생산성을 높일 수 있는 개발자로 성장할 수 있습니다.",
                 "길벗캠퍼스",
                 "IT",
-                "2024/12/31"
+                "2024/12/31",
+                "isbn1001.jpg"
         );
 
         Book book2 = new Book(
@@ -33,7 +34,8 @@ public class BookRepositoryImpl implements BookRepository {
                         "첫 번째 단편소설\n",
                 "어센틱",
                 "소설",
-                "2025/07/25"
+                "2025/07/25",
+                "isbn1002.jpg"
         );
 
         Book book3 = new Book(
@@ -44,7 +46,8 @@ public class BookRepositoryImpl implements BookRepository {
                 "〈모모〉의 작가 미하엘 엔데의 〈끝없는 이야기〉. '네가 원하는 것을 해라'라고 환상 세계를 상징하는 메달에 쓰여 있었다. 바스티안은 길고 힘겨운 모험 끝에서야 비로소 이 문장을 참뜻을 깨닫게 되는데.....",
                 "비룡소",
                 "소설",
-                "2003/03/15"
+                "2003/03/15",
+                "isbn1003.jpg"
         );
 
         Book book4 = new Book(
@@ -57,7 +60,8 @@ public class BookRepositoryImpl implements BookRepository {
                         "지금 당신을 구할 철학자들의 130여 가지 대답들",
                 "윌북",
                 "철학",
-                "2021/10/20"
+                "2021/10/20",
+                "isbn1004.jpg"
         );
 
         listOfBooks.add(book1);

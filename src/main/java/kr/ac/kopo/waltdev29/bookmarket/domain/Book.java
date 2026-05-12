@@ -5,12 +5,11 @@ package kr.ac.kopo.waltdev29.bookmarket.domain;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
 @Data // data 클래스임을 명시
-@Setter // setter를 자동으로 생성
-@Getter // getter를 자동으로 생성
 public class Book {
     private String bookId;  // 도서 ID
     private String name;    // 도서 이름
@@ -23,8 +22,9 @@ public class Book {
     private String releaseDate; // 출판 일자
     private String condition;   // 책 상태 (신품, 중고, e-book)
     private String fileName;
+    private MultipartFile bookImage;
 
-    public Book(String bookId, String name, BigDecimal unitPrice, String author, String description, String publisher, String category, String releaseDate) {
+    public Book(String bookId, String name, BigDecimal unitPrice, String author, String description, String publisher, String category, String releaseDate, String fileName) {
         this.bookId = bookId;
         this.name = name;
         this.unitPrice = unitPrice;
@@ -33,6 +33,6 @@ public class Book {
         this.publisher = publisher;
         this.category = category;
         this.releaseDate = releaseDate;
-        this.fileName = bookId + ".jpg";
+        this.fileName = fileName;
     }
 }
