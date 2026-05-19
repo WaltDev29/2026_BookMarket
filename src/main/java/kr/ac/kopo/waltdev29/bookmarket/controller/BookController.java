@@ -2,18 +2,19 @@
 
 package kr.ac.kopo.waltdev29.bookmarket.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import kr.ac.kopo.waltdev29.bookmarket.domain.Book;
 import kr.ac.kopo.waltdev29.bookmarket.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @Controller // 문자열로 HTML을 매핑해서 반환하는 컨트롤러      // RestController는 HTML을 매핑해서 반환하지 않음
@@ -63,7 +64,7 @@ public class BookController {
 
 
     // MatrixVariable로 도서 Filtering
-    @GetMapping(value="/{filter}")
+    @GetMapping(value="/filter/{filter}")
     public String requestBookByFilter(
             Model model,
             @MatrixVariable(pathVar = "filter")Map<String, List<String>> filter
@@ -98,6 +99,24 @@ public class BookController {
         book.setFileName(saveName);
         bookService.setNewBook(book);
         return "redirect:/books";
+    }
+
+    @GetMapping("/download")
+    public void bookImage(@RequestParam("file") String paramKey, HttpServletResponse response) {
+        File imgFile = new File(fileDir + paramKey);
+        response.setContentType("application/download");
+        response.setContentLength((int)imgFile.length());
+        response.setHeader("Content-Disposition", "attachment;filename=\"" + paramKey + "\"");
+
+        try {
+            OutputStream os = response.getOutputStream();
+            FileInputStream fis = new FileInputStream(imgFile);
+            FileCopyUtils.copy(fis,os);
+            fis.close();
+            os.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @ModelAttribute

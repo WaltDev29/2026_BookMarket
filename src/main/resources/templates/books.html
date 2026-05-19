@@ -15,8 +15,8 @@
                 <span class="fs-4">BookMarket</span>
             </a>
             <a class="nav-link" th:href="@{/books}">전체</a>&nbsp;&nbsp;
-            <a class="nav-link" th:href="@{/books(category='IT')}">IT</a>&nbsp;&nbsp;
-            <a class="nav-link" th:href="@{/books(category='소설')}">소설</a>
+            <a class="nav-link" th:href="@{/books/filter/${category}(category='IT')}">IT</a>&nbsp;&nbsp;
+            <a class="nav-link" th:href="@{/books/filter/${category}(category='소설')}">소설</a>
         </div>
     </header>
     <div class="p-5 mb-4 bg-body-tertiary rounded-3">
