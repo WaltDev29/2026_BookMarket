@@ -3,6 +3,7 @@
 package kr.ac.kopo.waltdev29.bookmarket.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import kr.ac.kopo.waltdev29.bookmarket.domain.Book;
 import kr.ac.kopo.waltdev29.bookmarket.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -80,12 +82,16 @@ public class BookController {
     String fileDir;
 
     @GetMapping(value="/add")
-    public String showAddBookPage() {
+    public String showAddBookPage(Model model)
+    {
+        model.addAttribute("book", new Book());
         return "addBook";
     }
 
     @PostMapping(value="/add")
-    public String addBook(Book book) {
+    public String addBook(@Valid Book book, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return "addBook";
+
         MultipartFile bookImage = book.getBookImage();
         String saveName = bookImage.getOriginalFilename();
         File saveFile = new File(fileDir, saveName);

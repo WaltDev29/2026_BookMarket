@@ -2,17 +2,23 @@
 
 package kr.ac.kopo.waltdev29.bookmarket.domain;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
 @Data // data 클래스임을 명시
 public class Book {
+    @Pattern(regexp="ISBN[1-9]+")
     private String bookId;  // 도서 ID
+
+    @Size(min=4, max=50)
     private String name;    // 도서 이름
+
+    @NotNull
+    @Min(value = 0)
+    @Digits(integer = 8, fraction = 2)
     private BigDecimal unitPrice;   // 가격
     private String author;  // 저자
     private String description; // 설명
@@ -23,6 +29,9 @@ public class Book {
     private String condition;   // 책 상태 (신품, 중고, e-book)
     private String fileName;
     private MultipartFile bookImage;
+
+    public Book() {
+    }
 
     public Book(String bookId, String name, BigDecimal unitPrice, String author, String description, String publisher, String category, String releaseDate, String fileName) {
         this.bookId = bookId;
