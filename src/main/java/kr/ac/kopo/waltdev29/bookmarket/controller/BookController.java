@@ -4,14 +4,17 @@ package kr.ac.kopo.waltdev29.bookmarket.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import kr.ac.kopo.waltdev29.bookmarket.domain.Book;
 import kr.ac.kopo.waltdev29.bookmarket.service.BookServiceImpl;
+import kr.ac.kopo.waltdev29.bookmarket.validator.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +27,13 @@ import java.util.*;
 public class BookController {
     @Autowired
     BookServiceImpl bookService;
+    @Autowired
+    private BookValidator bookValidator;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setValidator(bookValidator);
+    }
 
     @GetMapping // FastAPI의 @app.get 같은 것
     public String requestBookList(Model model, @RequestParam(value = "category", required = false) String category) {
