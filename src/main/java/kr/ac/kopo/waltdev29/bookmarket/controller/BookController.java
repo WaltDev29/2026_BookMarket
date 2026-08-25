@@ -38,7 +38,7 @@ public class BookController {
     @GetMapping // FastAPI의 @app.get 같은 것
     public String requestBookList(Model model, @RequestParam(value = "category", required = false) String category) {
         List<Book> bookList = new ArrayList<>();
-        if (category == null) {
+        if (category == null || category.isEmpty()) {
             bookList = bookService.getAllBookList();
         }
         else {
@@ -74,18 +74,6 @@ public class BookController {
         return "bookInfo";
     }
 
-
-    // MatrixVariable로 도서 Filtering
-    @GetMapping(value="/filter/{filter}")
-    public String requestBookByFilter(
-            Model model,
-            @MatrixVariable(pathVar = "filter")Map<String, List<String>> filter
-            )
-    {
-        Set<Book> bookList = bookService.getBooksByFilter(filter);
-        model.addAttribute("bookList", bookList);
-        return "books";
-    }
 
 
     @Value("${file.uploadDir}")
