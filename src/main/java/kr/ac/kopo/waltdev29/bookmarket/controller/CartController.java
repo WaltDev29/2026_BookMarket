@@ -62,7 +62,7 @@ public class CartController {
         cartService.update(sessionId, cart);
     }
 
-    @DeleteMapping("/{bookId}")
+    @DeleteMapping("/book/{bookId}")
     @ResponseStatus(value=HttpStatus.NO_CONTENT)
     public void removeCartByItem(@PathVariable String bookId, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
